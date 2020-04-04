@@ -1,14 +1,15 @@
-package com.mikolajczyk;
+package com.mikolajczyk.Components;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "Wypozyczenia_zwroty")
-public class History {
+public class History implements Serializable {
 
     @Id
     @Column(name = "id_ksiazki")

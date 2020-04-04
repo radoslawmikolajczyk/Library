@@ -1,4 +1,4 @@
-package com.mikolajczyk;
+package com.mikolajczyk.Components;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
