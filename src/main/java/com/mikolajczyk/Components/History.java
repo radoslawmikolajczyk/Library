@@ -22,9 +22,6 @@ public class History implements Serializable {
     @Column(name = "data_wypozyczenia")
     private Date lendDate;
 
-    @Column(name = "data_oddania")
-    private Date returnDate;
-
     public int getBookId() {
         return bookId;
     }
@@ -47,13 +44,5 @@ public class History implements Serializable {
 
     public void setLendDate(Date lendDate) {
         this.lendDate = lendDate;
-    }
-
-    public Date getReturnDate() {
-        return returnDate;
-    }
-
-    public void setReturnDate(Date returnDate) {
-        this.returnDate = returnDate;
     }
 }

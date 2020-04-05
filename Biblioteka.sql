@@ -29,7 +29,7 @@ CREATE TABLE Wypozyczenia_zwroty(
 	id_ksiazki INTEGER REFERENCES Ksiazka(id_ksiazki),
 	id_czytelnika INTEGER REFERENCES Czytelnik(id_czytelnika),
 	data_wypozyczenia DATE,
-	data_oddanai DATE
+	PRIMARY KEY(id_ksiazki, id_czytelnika)
 
 );
 
