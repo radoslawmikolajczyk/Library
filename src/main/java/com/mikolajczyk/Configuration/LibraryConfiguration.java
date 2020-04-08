@@ -30,7 +30,7 @@ public class LibraryConfiguration {
         transaction = session.beginTransaction();
     }
 
-    public static String commit(){
+    public static void commit(){
         try {
             transaction.commit();
             session.close();
@@ -38,8 +38,11 @@ public class LibraryConfiguration {
             configure();
             commit();
         } catch (Exception ex){
-            return "Unrecognized error. Please contact administrator.";
+            System.out.println("Unrecognized error. Please contact administrator.");
         }
-        return "OK.";
+    }
+
+    public static void refresh(){
+        configure();
     }
 }

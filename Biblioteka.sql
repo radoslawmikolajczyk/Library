@@ -5,7 +5,7 @@ USE Biblioteka;
 
 CREATE TABLE Czytelnik(
 
-	id_czytelnika INTEGER UNIQUE NOT NULL PRIMARY KEY,
+	id_czytelnika SERIAL UNIQUE NOT NULL PRIMARY KEY,
 	imie VARCHAR(30) NOT NULL,
 	nazwisko VARCHAR(50) NOT NULL,
 	nr_telefonu VARCHAR(12) UNIQUE NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE Czytelnik(
 
 CREATE TABLE Ksiazka(
 
-	id_ksiazki INTEGER UNIQUE NOT NULL PRIMARY KEY,
+	id_ksiazki SERIAL UNIQUE NOT NULL PRIMARY KEY,
 	autor VARCHAR(100) NOT NULL,
 	tytul VARCHAR(80) NOT NULL,
 	wydawnictwo VARCHAR(50),
@@ -26,10 +26,12 @@ CREATE TABLE Ksiazka(
 
 CREATE TABLE Wypozyczenia_zwroty(
 
-	id_ksiazki INTEGER REFERENCES Ksiazka(id_ksiazki),
-	id_czytelnika INTEGER REFERENCES Czytelnik(id_czytelnika),
-	data_wypozyczenia DATE,
-	PRIMARY KEY(id_ksiazki, id_czytelnika)
+    id_wypozyczenia SERIAL PRIMARY KEY,
+    imie VARCHAR(30) NOT NULL,
+	nazwisko VARCHAR(50) NOT NULL,
+	autor VARCHAR(100) NOT NULL,
+	tytul VARCHAR(80) NOT NULL,
+	data_wypozyczenia CHAR(10) NOT NULL
 
 );
 

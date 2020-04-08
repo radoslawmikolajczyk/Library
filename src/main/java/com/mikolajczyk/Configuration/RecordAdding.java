@@ -43,6 +43,6 @@ public class RecordAdding {
     }
 
     public void saveRecord(History history){
-        LibraryConfiguration.session.save(book);
+        LibraryConfiguration.session.save(history);
     }
 }

@@ -3,6 +3,7 @@ package com.mikolajczyk.Configuration;
 import com.mikolajczyk.Components.Book;
 import com.mikolajczyk.Components.History;
 import com.mikolajczyk.Components.Reader;
+import org.hibernate.Query;
 
 public class DeleteRecord {
 
@@ -35,15 +36,27 @@ public class DeleteRecord {
     }
 
     public void deleteHistory(){
-        LibraryConfiguration.session.delete(history);
+        String select = String.format("Delete from Wypozyczenia_zwroty where imie='%s' and nazwisko='%s' and autor='%s' and tytul='%s'",
+                history.getfName(),history.getlName(),history.getAuthor(),history.getTitle());
+        Query query = LibraryConfiguration.session.
+                createSQLQuery(select);
+        query.executeUpdate();
     }
 
     public void deleteBook(){
-        LibraryConfiguration.session.delete(book);
+        String select = String.format("Delete from Ksiazka where autor='%s' and tytul='%s'",
+                book.getAuthor(),book.getTitle());
+        Query query = LibraryConfiguration.session.
+                createSQLQuery(select);
+        query.executeUpdate();
     }
 
     public void deleteReader(){
-        LibraryConfiguration.session.delete(reader);
+        String select = String.format("Delete from Czytelnik where imie='%s' and nazwisko='%s' and nr_telefonu='%s'",
+                reader.getfName(),reader.getlName(),reader.getPhoneNumber());
+        Query query = LibraryConfiguration.session.
+                createSQLQuery(select);
+        query.executeUpdate();
     }
 
 }

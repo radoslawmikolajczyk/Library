@@ -37,7 +37,7 @@ public class ShowRecord {
         return (Book) LibraryConfiguration.session.get(Book.class, (Serializable) id);
     }
 
-    public void showSpecialQuery(){
+    public void showSpecialQuery(String table, String nameTitle, String lnameAuthor){
 
     }
 

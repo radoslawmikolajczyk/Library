@@ -3,7 +3,9 @@ package com.mikolajczyk.GUI;
 import com.mikolajczyk.Components.Book;
 import com.mikolajczyk.Components.History;
 import com.mikolajczyk.Components.Reader;
+import com.mikolajczyk.Configuration.DeleteRecord;
 import com.mikolajczyk.Configuration.LibraryConfiguration;
+import com.mikolajczyk.Configuration.RecordAdding;
 
 import javax.swing.*;
 import java.time.LocalDateTime;
@@ -50,123 +52,8 @@ public class Library extends JFrame implements Runnable{
     private History history;
     private Book book;
 
-
-    public JLabel getChooseOperationText() {
-        return chooseOperationText;
-    }
-
-    public JRadioButton getAddRecord() {
-        return addRecord;
-    }
-
-    public JRadioButton getDeleteRecord() {
-        return deleteRecord;
-    }
-
-    public JRadioButton getShowInfo() {
-        return showInfo;
-    }
-
-    public JComboBox getChooseFromList() {
-        return chooseFromList;
-    }
-
-    public JRadioButton getShowAll() {
-        return showAll;
-    }
-
-    public JRadioButton getOnlySpecialRecord() {
-        return onlySpecialRecord;
-    }
-
-    public JButton getConfirm() {
-        return confirm;
-    }
-
-    public JButton getReset() {
-        return reset;
-    }
-
-    public JTable getHistoryTable() {
-        return historyTable;
-    }
-
-    public JTable getUserTable() {
-        return userTable;
-    }
-
-    public JTable getBookTable() {
-        return bookTable;
-    }
-
-    public JPanel getPanel1() {
-        return panel1;
-    }
-
     public JLabel getHourDate() {
         return hourDate;
-    }
-
-    public JLabel getErrorMessage() {
-        return errorMessage;
-    }
-
-    public JTextField getEnterNameTitle() { return enterNameTitle; }
-
-    public JLabel getNameTitle() {
-        return nameTitle;
-    }
-
-    public JLabel getlNameAuthor() {
-        return lNameAuthor;
-    }
-
-    public JTextField getEnterLNameAuthor() {
-        return enterLNameAuthor;
-    }
-
-    public JTextField getEnterPhNumberPublicy() {
-        return enterPhNumberPublicy;
-    }
-
-    public JLabel getPhNumberPublicy() {
-        return phNumberPublicy;
-    }
-
-    public JTextField getEnterAddressYearOfPub() {
-        return enterAddressYearOfPub;
-    }
-
-    public JLabel getAddressYearOfPub() {
-        return addressYearOfPub;
-    }
-
-    public JLabel getNumberOfBooks() {
-        return numberOfBooks;
-    }
-
-    public JTextField getEnterNumberOfBooks() {
-        return enterNumberOfBooks;
-    }
-
-    public ButtonGroup getButtonGroup1() {
-        return buttonGroup1;
-    }
-
-    public ButtonGroup getButtonGroup2() {
-        return buttonGroup2;
-    }
-
-    public List<JTextField> getReaderTextFields() {
-        return readerTextFields;
-    }
-
-    public List<JTextField> getBookTextFields() {
-        return bookTextFields;
-    }
-
-    public List<JTextField> getHistoryTextFields() {
-        return historyTextFields;
     }
 
     public void runWindow(){
@@ -209,12 +96,16 @@ public class Library extends JFrame implements Runnable{
     public void messageFromDeletingAndShowingInfo(){
         String choose = (String) chooseFromList.getItemAt(chooseFromList.getSelectedIndex());
 
-        if (choose.equals("Czytelnicy")){
-            errorMessage.setText("Wystarczy, że podasz imię, nazwisko oraz numer telefonu czytelnika.");
-        } else if (choose.equals("Książki")){
-            errorMessage.setText("Wystarczy, że podasz tytuł i autora książki");
-        } else if (choose.equals("Wypożyczenia")){
-            errorMessage.setText("Musisz podać wszystkie dane wymagane w polach");
+        switch (choose) {
+            case "Czytelnicy":
+                errorMessage.setText("Wystarczy, że podasz imię, nazwisko oraz numer telefonu czytelnika.");
+                break;
+            case "Książki":
+                errorMessage.setText("Wystarczy, że podasz tytuł i autora książki");
+                break;
+            case "Wypożyczenia":
+                errorMessage.setText("Musisz podać wszystkie dane wymagane w polach");
+                break;
         }
     }
 
@@ -232,6 +123,7 @@ public class Library extends JFrame implements Runnable{
                 for (JTextField field : bookTextFields){
                     field.setVisible(false);
                 }
+                errorMessage.setText("");
             }
 
         });
@@ -248,8 +140,6 @@ public class Library extends JFrame implements Runnable{
             onlySpecialRecord.setVisible(false);
             errorMessage.setText("");
             onlySpecialRecord.doClick();
-
-
         });
 
         showInfo.addActionListener(e -> {
@@ -260,8 +150,15 @@ public class Library extends JFrame implements Runnable{
         });
 
         confirm.addActionListener(e -> {
+            if (addRecord.isSelected()){
+                createAdding();
+            } else if (deleteRecord.isSelected()){
+                createDeletion();
+            } else if (showInfo.isSelected()){
 
+            }
         });
+
     }
 
     public void defaultSettings(){
@@ -312,6 +209,80 @@ public class Library extends JFrame implements Runnable{
                 field.setVisible(true);
             }
         }
+    }
+
+    public void createDeletion(){
+        String choose = (String) chooseFromList.getItemAt(chooseFromList.getSelectedIndex());
+
+        switch (choose) {
+            case "Czytelnicy":
+                Reader reader = new Reader();
+                reader.setfName(enterNameTitle.getText());
+                reader.setlName(enterLNameAuthor.getText());
+                reader.setPhoneNumber(enterPhNumberPublicy.getText());
+                DeleteRecord deleteRecord = new DeleteRecord(reader);
+                deleteRecord.deleteReader();
+                break;
+            case "Książki":
+                Book book = new Book();
+                book.setTitle(enterNameTitle.getText());
+                book.setAuthor(enterLNameAuthor.getText());
+                DeleteRecord deleteRecord1 = new DeleteRecord(book);
+                deleteRecord1.deleteBook();
+                break;
+            case "Wypożyczenia":
+                History history = new History();
+                history.setfName(enterNameTitle.getText());
+                history.setlName(enterLNameAuthor.getText());
+                history.setTitle(enterPhNumberPublicy.getText());
+                history.setAuthor(enterAddressYearOfPub.getText());
+                DeleteRecord deleteRecord2 = new DeleteRecord(history);
+                deleteRecord2.deleteHistory();
+                break;
+        }
+        LibraryConfiguration.commit();
+        LibraryConfiguration.refresh();
+    }
+
+    public void createAdding(){
+        String choose = (String) chooseFromList.getItemAt(chooseFromList.getSelectedIndex());
+
+        switch (choose) {
+            case "Czytelnicy":
+                Reader reader = new Reader();
+                reader.setfName(enterNameTitle.getText());
+                reader.setlName(enterLNameAuthor.getText());
+                reader.setPhoneNumber(enterPhNumberPublicy.getText());
+                reader.setAddress(enterAddressYearOfPub.getText());
+                RecordAdding recordAdding = new RecordAdding(reader);
+                recordAdding.saveRecord(reader);
+                break;
+            case "Książki":
+                Book book = new Book();
+                book.setTitle(enterNameTitle.getText());
+                book.setAuthor(enterLNameAuthor.getText());
+                book.setNumber(Integer.parseInt(enterNumberOfBooks.getText()));
+                book.setPublisher(enterPhNumberPublicy.getText());
+                book.setYear(Integer.parseInt(enterAddressYearOfPub.getText()));
+                RecordAdding recordAdding1 = new RecordAdding(book);
+                recordAdding1.saveRecord(book);
+                break;
+            case "Wypożyczenia":
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter dtf  = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String lendDate = dtf.format(now);
+                History history = new History();
+                history.setfName(enterNameTitle.getText());
+                history.setlName(enterLNameAuthor.getText());
+                history.setTitle(enterPhNumberPublicy.getText());
+                history.setAuthor(enterAddressYearOfPub.getText());
+                history.setLendDate(lendDate);
+                RecordAdding recordAdding2 = new RecordAdding(history);
+                recordAdding2.saveRecord(history);
+                break;
+        }
+        LibraryConfiguration.commit();
+        LibraryConfiguration.refresh();
     }
 
     public static void main(String[] args) {
